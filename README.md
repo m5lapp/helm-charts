@@ -10,10 +10,10 @@ The source code of all of the Helm charts in this repository can be found on Git
 Once Helm has been installed and set up properly, add this repository as follows:
 
 ```bash
-helm repo add prometheus-community https://m5lapp.github.io/helm-charts
+helm repo add m5lapp https://m5lapp.github.io/helm-charts
 ```
 
-You can then run `helm search repo m4lapp` to list the available charts. To see the versions available for a particular chart, run `helm search repo m5lapp/<chartname> --versions`.
+You can then run `helm search repo m5lapp` to list the available charts. To see the versions available for a particular chart, run `helm search repo m5lapp/<chartname> --versions`.
 
 To install the <chart-name> chart, run `helm install my-<chart-name> m5lapp/<chart-name>`.
 
