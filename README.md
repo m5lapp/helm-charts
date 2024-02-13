@@ -17,7 +17,7 @@ You can then run `helm search repo m4lapp` to list the available charts. To see 
 
 To install the <chart-name> chart, run `helm install my-<chart-name> m5lapp/<chart-name>`.
 
-If you wish to uninstall a chart, run `helm delete my-<chart-name>`.
+If you wish to uninstall a chart, run `helm uninstall my-<chart-name>`.
 
 ## License
 <!-- Keep full URL links to repo files because this README syncs from main to gh-pages.  -->
