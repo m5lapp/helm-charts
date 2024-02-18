@@ -12,7 +12,7 @@ app:
     username: fitness_tracker_user
   debug: "0"
   image:
-    repository: docker.io/rareb1t/fitness-tracker
+    repository: ghcr.io/m5lapp/fitness-tracker
     tag: ""
   ports:
     internal: 8080
@@ -32,7 +32,7 @@ app:
 
 proxy:
   image:
-    repository: docker.io/rareb1t/fitness-tracker-proxy
+    repository: ghcr.io/m5lapp/fitness-tracker-proxy
     tag: ""
   ports:
     internal: 8080
