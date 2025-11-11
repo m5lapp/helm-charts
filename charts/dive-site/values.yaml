@@ -1,0 +1,65 @@
+namespace: divesite
+
+useSealedSecrets: false
+
+app:
+  database:
+    engine: postgresql
+    host: db.example.com
+    name: divesite
+    password: Sup3rS3cr3tP455w0rd
+    port: "5432"
+    username: divesite_user
+  debug: "0"
+  image:
+    repository: ghcr.io/m5lapp/dive-site
+    tag: ""
+  ports:
+    internal: 8080
+  probes:
+    liveness:
+      active: true
+      path: /status
+  replicas: 1
+  resources:
+    limits:
+      # cpu: "500m"
+      memory: "128Mi"
+    requests:
+      memory: "128Mi"
+  terminationGracePeriodSeconds: 20
+
+ingress:
+  active: true
+  clusterIssuer: letsencrypt-prod
+  domain: example.com
+  fqdn: dive-site.example.com
+  mtls:
+    active: false
+    clientCert:
+      duration: 8760h # 1 year.
+      userName: dive-site
+    trustNamespace: cert-manager
+    rootCA:
+      certificateSecret: example-com-root-ca-cert
+      issuer: example-com-root-ca-issuer
+  tls:
+    minVersion: VersionTLS12
+    maxVersion: VersionTLS13
+    secretName: dive-site-tls-prod
+
+serviceMesh:
+  linkerd:
+    active: false
+
+dbBackup:
+  active: false
+  schedule: "0 2 * * *"
+  resources:
+    limits:
+      memory: "64Mi"
+  retentionDays: "120"
+  volume:
+    capacity: 200Mi
+    storageClass: longhorn
+
