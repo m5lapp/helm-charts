@@ -26,6 +26,10 @@ jobs:
       uses: azure/setup-helm@v3
 
     - name: Run chart-releaser
-      uses: helm/chart-releaser-action@v1.6.0
+      uses: helm/chart-releaser-action@v1.7.0
+      with:
+        # Do not fail if a chart already exists at a given version, ignore it.
+        skip_existing: true
       env:
         CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
