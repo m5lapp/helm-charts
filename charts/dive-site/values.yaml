@@ -1,6 +1,9 @@
 namespace: divesite
 
 useSealedSecrets: false
+# Scope can be set to "cluster-wide" or "namespace-wide". Leaving it empty means
+# that "strict" mode will be used.
+sealedSecretsScope: ""
 
 app:
   database:

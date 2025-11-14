@@ -30,6 +30,10 @@ data:
 apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
 metadata:
+  annotations:
+    {{- with .Values.sealedSecretsScope }}
+    sealedsecrets.bitnami.com/{{ . }}: "true"
+    {{- end }}
   labels:
     app: {{ .Chart.Name }}
   name: {{ .Chart.Name }}-secrets
