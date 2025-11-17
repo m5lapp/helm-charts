@@ -8,11 +8,7 @@ sealedSecretsScope: ""
 app:
   database:
     engine: postgresql
-    host: db.example.com
-    name: divesite
-    password: Sup3rS3cr3tP455w0rd
-    port: "5432"
-    username: divesite_user
+    dsn: postgresql://divesite_user:Sup3rS3cr3tP455w0rd@db.example.com:5432/divesite_prod
   debug: "0"
   image:
     repository: ghcr.io/m5lapp/dive-site

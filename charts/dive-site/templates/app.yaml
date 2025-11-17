@@ -14,18 +14,6 @@ spec:
 
 ---
 
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  labels:
-    app: {{ .Chart.Name }}
-  name: {{ .Chart.Name }}-config
-  namespace: {{ .Values.namespace }}
-data:
-  DIVESITE_DB_PORT: {{ quote .Values.app.database.port}}
-
----
-
 {{ if .Values.useSealedSecrets -}}
 apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
@@ -45,10 +33,7 @@ spec:
         app: {{ .Chart.Name }}
     type: Opaque
   encryptedData:
-    DIVESITE_DB_HOST: {{ .Values.app.database.host }}
-    DIVESITE_DB_NAME: {{ .Values.app.database.name }}
-    DIVESITE_DB_PASSWORD: {{ .Values.app.database.password }}
-    DIVESITE_DB_USERNAME: {{ .Values.app.database.username }}
+    DIVESITE_DB_DSN: {{ .Values.app.database.dsn }}
 {{- else }}
 apiVersion: v1
 kind: Secret
@@ -58,10 +43,7 @@ metadata:
   name: {{ .Chart.Name }}-secrets
   namespace: {{ .Values.namespace }}
 data:
-  DIVESITE_DB_HOST: {{ b64enc .Values.app.database.host }}
-  DIVESITE_DB_NAME: {{ b64enc .Values.app.database.name }}
-  DIVESITE_DB_PASSWORD: {{ b64enc .Values.app.database.password }}
-  DIVESITE_DB_USERNAME: {{ b64enc .Values.app.database.username }}
+  DIVESITE_DB_DSN: {{ .Values.app.database.dsn }}
 type: Opaque
 {{- end }}
 
@@ -88,6 +70,11 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag | default .Chart.AppVersion }}"
+        args:
+        - --addr
+        - ":{{ .Values.app.ports.internal }}"
+        - --dsn
+        - "$(DIVESITE_DB_DSN)"
         ports:
         - containerPort: {{ .Values.app.ports.internal }}
         {{- if .Values.app.probes.liveness.active }}
@@ -104,8 +91,6 @@ spec:
           {{- toYaml . | nindent 10 }}
         {{- end }}
         envFrom:
-        - configMapRef:
-            name: {{ .Chart.Name }}-config
         - secretRef:
             name: {{ .Chart.Name }}-secrets
       serviceAccountName: {{ .Chart.Name }}

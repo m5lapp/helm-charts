@@ -39,10 +39,7 @@ spec:
             - -c
             - |
               ls -l /var/lib/postgresql/backups/ && \
-              pg_dump -h ${PGHOST} \
-                      -p ${PGPORT} \
-                      -U ${PGUSER} \
-                      -d ${PGDATABASE} \
+              pg_dump ${DIVESITE_DB_DSN} \
                       > /var/lib/postgresql/backups/$(date +"%Y%m%d%H%M%S").sql && \
               echo "Removing backups older than ${BACKUP_RETENTION_DAYS} days" && \
               find /var/lib/postgresql/backups/ \
@@ -57,31 +54,11 @@ spec:
             env:
             - name: BACKUP_RETENTION_DAYS
               value: {{ quote .Values.dbBackup.retentionDays }}
-            - name: PGHOST
+            - name: DIVESITE_DB_DSN
               valueFrom:
                 secretKeyRef:
                   name: {{ .Chart.Name }}-secrets
-                  key: FT_DB_HOST
-            - name: PGPORT
-              valueFrom:
-                configMapKeyRef:
-                  name: {{ .Chart.Name }}-config
-                  key: FT_DB_PORT
-            - name: PGDATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Chart.Name }}-secrets
-                  key: FT_DB_NAME
-            - name: PGUSER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Chart.Name }}-secrets
-                  key: FT_DB_USERNAME
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Chart.Name }}-secrets
-                  key: FT_DB_PASSWORD
+                  key: DIVESITE_DB_DSN
             {{- with .Values.app.resources }}
             resources:
               {{- toYaml . | nindent 14 }}
