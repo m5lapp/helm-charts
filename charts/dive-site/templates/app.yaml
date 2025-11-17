@@ -73,7 +73,7 @@ spec:
         args:
         - --addr
         - ":{{ .Values.app.ports.internal }}"
-        - --dsn
+        - --db-dsn
         - "$(DIVESITE_DB_DSN)"
         ports:
         - containerPort: {{ .Values.app.ports.internal }}
