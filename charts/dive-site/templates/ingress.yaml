@@ -41,7 +41,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ .Chart.Name }}-proxy
+            name: {{ .Chart.Name }}
             port:
               number: {{ .Values.app.ports.internal }}
   tls:
