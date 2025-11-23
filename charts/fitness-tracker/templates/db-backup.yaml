@@ -29,6 +29,11 @@ spec:
         job: database-backup-data
     spec:
       template:
+        {{- if .Values.serviceMesh.linkerd.active }}
+        metadata:
+          annotations:
+            config.beta.linkerd.io/proxy-enable-native-sidecar: "true"
+        {{- end }}
         spec:
           containers:
           - name: database-backup-data
@@ -51,9 +56,6 @@ spec:
                    -mtime +${BACKUP_RETENTION_DAYS} \
                    -delete && \
               ls -l /var/lib/postgresql/backups/
-              {{- if .Values.serviceMesh.linkerd.active }} && \
-              CODE=$?; wget --post-data '' 127.0.0.1:4191/shutdown; exit $CODE
-              {{- end }}
             env:
             - name: BACKUP_RETENTION_DAYS
               value: {{ quote .Values.dbBackup.retentionDays }}
