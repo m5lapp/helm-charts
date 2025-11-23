@@ -3,6 +3,19 @@ entries:
   dive-site:
   - apiVersion: v2
     appVersion: 0.0.6
+    created: "2025-11-23T16:40:05.924082365Z"
+    description: A web portal for SCUBA diving written in Go
+    digest: 50e3a80ae83995feb81ce4f778d9a8af882f8159c75fbb33715701db04ff6eff
+    home: https://github.com/m5lapp/dive-site
+    name: dive-site
+    sources:
+    - https://github.com/m5lapp/dive-site
+    type: application
+    urls:
+    - https://github.com/m5lapp/helm-charts/releases/download/dive-site-0.0.12/dive-site-0.0.12.tgz
+    version: 0.0.12
+  - apiVersion: v2
+    appVersion: 0.0.6
     created: "2025-11-18T22:41:50.665625169Z"
     description: A web portal for SCUBA diving written in Go
     digest: b4be21d411fd71acd37522ad1982232742ba19203bc396f49f602f92971f55fd
@@ -108,6 +121,20 @@ entries:
   fitness-tracker:
   - apiVersion: v2
     appVersion: 1.2.7
+    created: "2025-11-23T16:40:06.111669314Z"
+    description: A basic fitness and nutrition tracking web application created with
+      Django
+    digest: 995b9e3248e1b1ab240345079be88d1c9b3a0b41be1546b5a67f10cbd21898d9
+    home: https://github.com/m5lapp/fitness-tracker
+    name: fitness-tracker
+    sources:
+    - https://github.com/m5lapp/fitness-tracker
+    type: application
+    urls:
+    - https://github.com/m5lapp/helm-charts/releases/download/fitness-tracker-1.2.8/fitness-tracker-1.2.8.tgz
+    version: 1.2.8
+  - apiVersion: v2
+    appVersion: 1.2.7
     created: "2024-02-12T23:54:14.911728653Z"
     description: A basic fitness and nutrition tracking web application created with
       Django
@@ -120,4 +147,4 @@ entries:
     urls:
     - https://github.com/m5lapp/helm-charts/releases/download/fitness-tracker-1.2.7/fitness-tracker-1.2.7.tgz
     version: 1.2.7
-generated: "2025-11-18T22:41:50.665667899Z"
+generated: "2025-11-23T16:40:06.111722684Z"
