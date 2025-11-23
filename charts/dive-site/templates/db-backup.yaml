@@ -29,11 +29,6 @@ spec:
         job: database-backup-data
     spec:
       template:
-        {{- if .Values.serviceMesh.linkerd.active }}
-        metadata:
-          annotations:
-            config.beta.linkerd.io/proxy-enable-native-sidecar: "true"
-        {{- end }}
         spec:
           containers:
           - name: database-backup-data

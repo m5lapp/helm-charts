@@ -23,9 +23,9 @@ app:
   resources:
     limits:
       # cpu: "500m"
-      memory: "128Mi"
+      memory: "32Mi"
     requests:
-      memory: "128Mi"
+      memory: "32Mi"
   terminationGracePeriodSeconds: 20
 
 ingress:
