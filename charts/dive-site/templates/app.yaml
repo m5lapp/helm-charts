@@ -67,6 +67,23 @@ spec:
         component: app
         technology: golang
     spec:
+      initContainers:
+      - name: db-migrate
+        image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag | default .Chart.AppVersion }}"
+        command: "/migrate"
+        args:
+        - --path
+        - "/migrations/"
+        - --db-dsn
+        - "$(DIVESITE_DB_DSN)"
+        - up
+        {{- with .Values.app.resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        envFrom:
+        - secretRef:
+            name: {{ .Chart.Name }}-secrets
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag | default .Chart.AppVersion }}"
