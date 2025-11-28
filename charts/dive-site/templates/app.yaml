@@ -74,7 +74,7 @@ spec:
         args:
         - --path
         - "/migrations/"
-        - --db-dsn
+        - --database
         - "$(DIVESITE_DB_DSN)"
         - up
         {{- with .Values.app.resources }}
