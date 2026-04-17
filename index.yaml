@@ -172,6 +172,20 @@ entries:
     version: 0.0.3
   fitness-tracker:
   - apiVersion: v2
+    appVersion: 1.2.9
+    created: "2026-04-17T21:50:20.13093484Z"
+    description: A basic fitness and nutrition tracking web application created with
+      Django
+    digest: 0db273e2fcdcb6e510b4fdf9716fa4859013e8e1e802e00b59cd6e1a032941d5
+    home: https://github.com/m5lapp/fitness-tracker
+    name: fitness-tracker
+    sources:
+    - https://github.com/m5lapp/fitness-tracker
+    type: application
+    urls:
+    - https://github.com/m5lapp/helm-charts/releases/download/fitness-tracker-1.2.9/fitness-tracker-1.2.9.tgz
+    version: 1.2.9
+  - apiVersion: v2
     appVersion: 1.2.7
     created: "2025-11-23T16:40:06.111669314Z"
     description: A basic fitness and nutrition tracking web application created with
@@ -199,4 +213,4 @@ entries:
     urls:
     - https://github.com/m5lapp/helm-charts/releases/download/fitness-tracker-1.2.7/fitness-tracker-1.2.7.tgz
     version: 1.2.7
-generated: "2026-03-03T22:28:42.391699458Z"
+generated: "2026-04-17T21:50:20.130975025Z"
