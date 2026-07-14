@@ -92,6 +92,22 @@ spec:
         - ":{{ .Values.app.ports.internal }}"
         - --db-dsn
         - "$(DIVESITE_DB_DSN)"
+        {{- with .Values.app.database.maxOpenConns }}
+        - --db-max-open-conns
+        - {{ . }}
+        {{- end }}
+        {{- with .Values.app.database.maxIdleConns }}
+        - --db-max-idle-conns
+        - {{ . }}
+        {{- end }}
+        {{- with .Values.app.database.maxConnLifetime }}
+        - --db-max-conn-lifetime
+        - {{ . }}
+        {{- end }}
+        {{- with .Values.app.database.maxConnIdleTime }}
+        - --db-max-conn-idle-time
+        - {{ . }}
+        {{- end }}
         ports:
         - containerPort: {{ .Values.app.ports.internal }}
         {{- if .Values.app.probes.liveness.active }}
