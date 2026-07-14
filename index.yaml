@@ -2,6 +2,19 @@ apiVersion: v1
 entries:
   dive-site:
   - apiVersion: v2
+    appVersion: 1.2.0
+    created: "2026-07-14T23:33:04.130139318Z"
+    description: A web portal for SCUBA diving written in Go
+    digest: 0a489788d40d403dec895c09e4774e611cc7019d06c6c4b4feecfc418151f77c
+    home: https://github.com/m5lapp/dive-site
+    name: dive-site
+    sources:
+    - https://github.com/m5lapp/dive-site
+    type: application
+    urls:
+    - https://github.com/m5lapp/helm-charts/releases/download/dive-site-1.0.4/dive-site-1.0.4.tgz
+    version: 1.0.4
+  - apiVersion: v2
     appVersion: 1.1.0
     created: "2026-03-03T22:28:42.391582659Z"
     description: A web portal for SCUBA diving written in Go
@@ -227,4 +240,4 @@ entries:
     urls:
     - https://github.com/m5lapp/helm-charts/releases/download/fitness-tracker-1.2.7/fitness-tracker-1.2.7.tgz
     version: 1.2.7
-generated: "2026-04-18T17:36:10.270101979Z"
+generated: "2026-07-14T23:33:04.13025315Z"
