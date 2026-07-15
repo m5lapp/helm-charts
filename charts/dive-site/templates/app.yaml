@@ -94,11 +94,11 @@ spec:
         - "$(DIVESITE_DB_DSN)"
         {{- with .Values.app.database.maxOpenConns }}
         - --db-max-open-conns
-        - {{ . }}
+        - {{ quote . }}
         {{- end }}
         {{- with .Values.app.database.maxIdleConns }}
         - --db-max-idle-conns
-        - {{ . }}
+        - {{ quote . }}
         {{- end }}
         {{- with .Values.app.database.maxConnLifetime }}
         - --db-max-conn-lifetime
