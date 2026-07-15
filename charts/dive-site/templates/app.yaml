@@ -92,13 +92,13 @@ spec:
         - ":{{ .Values.app.ports.internal }}"
         - --db-dsn
         - "$(DIVESITE_DB_DSN)"
-        {{- with .Values.app.database.maxOpenConns }}
+        {{- if hasKey .Values.app.database "maxOpenConns" }}
         - --db-max-open-conns
-        - {{ quote . }}
+        - {{ quote .Values.app.database.maxOpenConns }}
         {{- end }}
-        {{- with .Values.app.database.maxIdleConns }}
+        {{- if hasKey .Values.app.database "maxIdleConns" }}
         - --db-max-idle-conns
-        - {{ quote . }}
+        - {{ quote .Values.app.database.maxIdleConns }}
         {{- end }}
         {{- with .Values.app.database.maxConnLifetime }}
         - --db-max-conn-lifetime
