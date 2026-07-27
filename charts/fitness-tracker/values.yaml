@@ -10,6 +10,10 @@ app:
     password: Sup3rS3cr3tP455w0rd
     port: "5432"
     username: fitness_tracker_user
+    mtls:
+      cert: ""
+      key: ""
+      caCert: ""
   debug: "0"
   image:
     repository: ghcr.io/m5lapp/fitness-tracker

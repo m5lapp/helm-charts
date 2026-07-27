@@ -69,6 +69,48 @@ type: Opaque
 
 ---
 
+{{ $dbMTLS := and .Values.app.database.mtls.cert .Values.app.database.mtls.key -}}
+{{ $dbMTLS -}}
+{{ if .Values.useSealedSecrets -}}
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    {{- with .Values.sealedSecretsScope }}
+    sealedsecrets.bitnami.com/{{ . }}: "true"
+    {{- end }}
+  labels:
+    app: {{ .Chart.Name }}
+  name: {{ .Chart.Name }}-db-mtls-certs
+  namespace: {{ .Values.namespace }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    type: kubernetes.io/tls
+  encryptedData:
+    tls.crt: {{ .Values.app.database.mtls.cert }}
+    tls.key: {{ .Values.app.database.mtls.key }}
+    {{ with .Values.app.database.mtls.caCert }}ca.crt: .{{ end }}
+{{- else }}
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: {{ .Chart.Name }}
+  name: {{ .Chart.Name }}-db-mtls-certs
+  namespace: {{ .Values.namespace }}
+type: kubernetes.io/tls
+data:
+  tls.crt: {{ .Values.app.database.mtls.cert }}
+  tls.crt: {{ .Values.app.database.mtls.key }}
+  {{ with .Values.app.database.mtls.caCert }}ca.crt: .{{ end }}
+{{- end }}
+{{- end }}
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -122,5 +164,19 @@ spec:
             name: {{ .Chart.Name }}-config
         - secretRef:
             name: {{ .Chart.Name }}-secrets
+        {{- if $dbMTLS }}
+        volumeMounts:
+        - name: db-mtls-certs
+          mountPath: /
+          readOnly: true
+        {{- end }}
       serviceAccountName: {{ .Chart.Name }}
       terminationGracePeriodSeconds: {{ .Values.app.terminationGracePeriodSeconds }}
+      {{- if $dbMTLS }}
+      volumes:
+      - name: db-mtls-certs
+        secret:
+          secretName: {{ .Chart.Name }}-db-mtls-certs
+          defaultMode: 0400
+      {{- end }}
+
