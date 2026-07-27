@@ -9,6 +9,10 @@ app:
   database:
     engine: postgresql
     dsn: postgresql://divesite_user:Sup3rS3cr3tP455w0rd@db.example.com:5432/divesite_prod
+    mtls:
+      cert: ""
+      key: ""
+      caCert: ""
   debug: "0"
   image:
     repository: ghcr.io/m5lapp/dive-site
