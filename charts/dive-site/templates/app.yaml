@@ -50,7 +50,7 @@ type: Opaque
 ---
 
 {{ $dbMTLS := and .Values.app.database.mtls.cert .Values.app.database.mtls.key -}}
-{{ $dbMTLS -}}
+{{ if $dbMTLS -}}
 {{ if .Values.useSealedSecrets -}}
 apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
