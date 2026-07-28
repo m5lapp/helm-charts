@@ -72,7 +72,7 @@ spec:
   encryptedData:
     tls.crt: {{ .Values.app.database.mtls.cert }}
     tls.key: {{ .Values.app.database.mtls.key }}
-    {{ with .Values.app.database.mtls.caCert }}ca.crt: .{{ end }}
+    {{ with .Values.app.database.mtls.caCert }}ca.crt: {{ . }}{{ end }}
 {{- else }}
 apiVersion: v1
 kind: Secret
@@ -85,7 +85,7 @@ type: kubernetes.io/tls
 data:
   tls.crt: {{ .Values.app.database.mtls.cert }}
   tls.crt: {{ .Values.app.database.mtls.key }}
-  {{ with .Values.app.database.mtls.caCert }}ca.crt: .{{ end }}
+  {{ with .Values.app.database.mtls.caCert }}ca.crt: {{ . }}{{ end }}
 {{- end }}
 {{- end }}
 
