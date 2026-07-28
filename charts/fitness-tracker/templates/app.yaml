@@ -141,6 +141,12 @@ spec:
             name: {{ .Chart.Name }}-config
         - secretRef:
             name: {{ .Chart.Name }}-secrets
+        {{- if $dbMTLS }}
+        volumeMounts:
+        - name: db-mtls-certs
+          mountPath: /mtls/
+          readOnly: true
+        {{- end }}
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.app.image.repository }}:{{ .Values.app.image.tag | default .Chart.AppVersion }}"
@@ -167,7 +173,7 @@ spec:
         {{- if $dbMTLS }}
         volumeMounts:
         - name: db-mtls-certs
-          mountPath: /
+          mountPath: /mtls/
           readOnly: true
         {{- end }}
       serviceAccountName: {{ .Chart.Name }}
