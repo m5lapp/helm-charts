@@ -47,10 +47,12 @@ spec:
   encryptedData:
     FT_DB_HOST: {{ .Values.app.database.host }}
     FT_DB_NAME: {{ .Values.app.database.name }}
-    FT_DB_PASSWORD: {{ .Values.app.database.password }}
+    {{ with .Values.app.database.password }}FT_DB_PASSWORD: .{{ end }}
     FT_DB_USERNAME: {{ .Values.app.database.username }}
+    {{ with .Values.app.database.sslmode }}FT_DB_SSLMODE: .{{ end }}
+    {{ with .Values.app.database.mtls.keyPassword }}FT_DB_SSLPASSWORD: .{{ end }}
+    {{ with .Values.app.database.options }}FT_DB_OPTIONS: .{{ end }}
     FT_SECRET_KEY: {{ .Values.app.secretKey }}
-{{- else }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -61,8 +63,11 @@ metadata:
 data:
   FT_DB_HOST: {{ b64enc .Values.app.database.host }}
   FT_DB_NAME: {{ b64enc .Values.app.database.name }}
-  FT_DB_PASSWORD: {{ b64enc .Values.app.database.password }}
+  {{ with .Values.app.database.password }}FT_DB_PASSWORD: {{ b64enc . }}{{ end }}
   FT_DB_USERNAME: {{ b64enc .Values.app.database.username }}
+  {{ with .Values.app.database.sslmode }}FT_DB_SSLMODE: {{ b64enc . }}{{ end }}
+  {{ with .Values.app.database.mtls.keyPassword }}FT_DB_SSLPASSWORD: {{ b64enc . }}{{ end }}
+  {{ with .Values.app.database.options }}FT_DB_OPTIONS: {{ b64enc . }}{{ end }}
   FT_SECRET_KEY: {{ b64enc .Values.app.secretKey }}
 type: Opaque
 {{- end }}
@@ -103,9 +108,9 @@ metadata:
   namespace: {{ .Values.namespace }}
 type: kubernetes.io/tls
 data:
-  tls.crt: {{ .Values.app.database.mtls.cert }}
-  tls.crt: {{ .Values.app.database.mtls.key }}
-  {{ with .Values.app.database.mtls.caCert }}ca.crt: {{ . }}{{ end }}
+  tls.crt: {{ b64enc .Values.app.database.mtls.cert }}
+  tls.key: {{ b64enc .Values.app.database.mtls.key }}
+  {{ with .Values.app.database.mtls.caCert }}ca.crt: {{ b64enc . }}{{ end }}
 {{- end }}
 {{- end }}
 
@@ -142,9 +147,16 @@ spec:
         - secretRef:
             name: {{ .Chart.Name }}-secrets
         {{- if $dbMTLS }}
+        env:
+        - name: FT_DB_SSLCERT
+          value: /home/app/mtls/tls.crt
+        - name: FT_DB_SSLKEY
+          value: /home/app/mtls/tls.key
+        - name: FT_DB_SSLROOTCERT
+          value: /home/app/mtls/ca.crt
         volumeMounts:
-        - name: db-mtls-certs
-          mountPath: /mtls/
+        - name: {{ .Chart.Name }}-db-mtls-certs
+          mountPath: /home/app/mtls/
           readOnly: true
         {{- end }}
       containers:
@@ -171,9 +183,16 @@ spec:
         - secretRef:
             name: {{ .Chart.Name }}-secrets
         {{- if $dbMTLS }}
+        env:
+        - name: FT_DB_SSLCERT
+          value: /home/app/mtls/tls.crt
+        - name: FT_DB_SSLKEY
+          value: /home/app/mtls/tls.key
+        - name: FT_DB_SSLROOTCERT
+          value: /home/app/mtls/ca.crt
         volumeMounts:
-        - name: db-mtls-certs
-          mountPath: /mtls/
+        - name: {{ .Chart.Name }}-db-mtls-certs
+          mountPath: /home/app/mtls/
           readOnly: true
         {{- end }}
       serviceAccountName: {{ .Chart.Name }}

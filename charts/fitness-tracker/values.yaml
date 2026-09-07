@@ -7,14 +7,18 @@ app:
     engine: postgresql
     host: db.example.com
     name: fitness_tracker
-    password: Sup3rS3cr3tP455w0rd
+    password: ""
     port: "5432"
     username: fitness_tracker_user
+    sslmode: "require"
     mtls:
       cert: ""
       key: ""
+      keyPassword: ""
       caCert: ""
-  debug: "0"
+    options: ""
+    # options: '{"optionA": "valueA", "optionB": "valueB"}'
+  debug: "1"
   image:
     repository: ghcr.io/m5lapp/fitness-tracker
     tag: ""
@@ -31,7 +35,7 @@ app:
       memory: "512Mi"
     requests:
       memory: "384Mi"
-  secretKey: django-insecure-abcdefghijklmnopqrstuvwxyz0123456789!"£$%^&*()"
+  secretKey: "django-insecure-abcdefghijklmnopqrstuvwxyz0123456789!$|%^&*()"
   terminationGracePeriodSeconds: 20
 
 proxy:

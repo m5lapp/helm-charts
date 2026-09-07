@@ -13,6 +13,8 @@ spec:
 
 ---
 
+{{ $dbMTLS := and .Values.app.database.mtls.cert .Values.app.database.mtls.key -}}
+
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -32,17 +34,21 @@ spec:
         spec:
           containers:
           - name: database-backup-data
-            image: docker.io/postgres:14-alpine
+            image: docker.io/postgres:18-alpine
             command:
             - /bin/sh
             args:
             - -c
             - |
               ls -l /var/lib/postgresql/backups/ && \
-              pg_dump -h ${PGHOST} \
-                      -p ${PGPORT} \
-                      -U ${PGUSER} \
-                      -d ${PGDATABASE} \
+              pg_dump "
+                        {{- range $k, $v := (fromJson .Values.app.database.options) }}
+                          {{ $k }}='{{ $v }}'
+                        {{- end }}
+                        {{- with .Values.app.database.mtls.keyPassword }}
+                          sslpassword='{{ . }}'
+                        {{- end }}
+                      " \
                       > /var/lib/postgresql/backups/$(date +"%Y%m%d%H%M%S").sql && \
               echo "Removing backups older than ${BACKUP_RETENTION_DAYS} days" && \
               find /var/lib/postgresql/backups/ \
@@ -74,11 +80,30 @@ spec:
                 secretKeyRef:
                   name: {{ .Chart.Name }}-secrets
                   key: FT_DB_USERNAME
+            {{- if .Values.app.database.password }}
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .Chart.Name }}-secrets
                   key: FT_DB_PASSWORD
+            {{- end }}
+            {{- if .Values.app.database.sslmode }}
+            - name: PGSSLMODE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Chart.Name }}-secrets
+                  key: FT_DB_SSLMODE
+            {{- end }}
+            {{- if $dbMTLS }}
+            - name: PGSSLCERT
+              value: /tmp/mtls/tls.crt
+            - name: PGSSLKEY
+              value: /tmp/mtls/tls.key
+            {{- with .Values.app.database.mtls.caCert}}
+            - name: PGSSLROOTCERT
+              value: /tmp/mtls/ca.crt
+            {{- end }}
+            {{- end }}
             {{- with .Values.app.resources }}
             resources:
               {{- toYaml . | nindent 14 }}
@@ -86,12 +111,23 @@ spec:
             volumeMounts:
             - name: database-backups
               mountPath: /var/lib/postgresql/backups/
+            {{- if $dbMTLS }}
+            - name: {{ .Chart.Name }}-db-mtls-certs
+              mountPath: /tmp/mtls/
+              readOnly: true
+            {{- end }}
           restartPolicy: OnFailure
           serviceAccountName: {{ .Chart.Name }}
           volumes:
           - name: database-backups
             persistentVolumeClaim:
               claimName: {{ .Chart.Name }}-database-backups
+          {{- if $dbMTLS }}
+          - name: {{ .Chart.Name }}-db-mtls-certs
+            secret:
+              secretName: {{ .Chart.Name }}-db-mtls-certs
+              defaultMode: 0400
+          {{- end }}
 {{- end }}
 
 # ---
