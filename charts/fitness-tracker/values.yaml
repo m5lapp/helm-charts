@@ -1,6 +1,6 @@
 namespace: fitness-tracker
 
-useSealedSecrets: false
+useSealedSecrets: true
 
 app:
   database:
@@ -12,10 +12,10 @@ app:
     username: fitness_tracker_user
     sslmode: "require"
     mtls:
-      cert: ""
-      key: ""
+      cert: "abc123"
+      key: "abc123"
       keyPassword: ""
-      caCert: ""
+      caCert: "abc123"
     options: ""
     # options: '{"optionA": "valueA", "optionB": "valueB"}'
   debug: "1"

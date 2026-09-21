@@ -47,12 +47,13 @@ spec:
   encryptedData:
     FT_DB_HOST: {{ .Values.app.database.host }}
     FT_DB_NAME: {{ .Values.app.database.name }}
-    {{ with .Values.app.database.password }}FT_DB_PASSWORD: .{{ end }}
+    {{ with .Values.app.database.password }}FT_DB_PASSWORD: {{ . }}{{ end }}
     FT_DB_USERNAME: {{ .Values.app.database.username }}
-    {{ with .Values.app.database.sslmode }}FT_DB_SSLMODE: .{{ end }}
-    {{ with .Values.app.database.mtls.keyPassword }}FT_DB_SSLPASSWORD: .{{ end }}
-    {{ with .Values.app.database.options }}FT_DB_OPTIONS: .{{ end }}
+    {{ with .Values.app.database.sslmode }}FT_DB_SSLMODE: {{ . }}{{ end }}
+    {{ with .Values.app.database.mtls.keyPassword }}FT_DB_SSLPASSWORD: {{ . }}{{ end }}
+    {{ with .Values.app.database.options }}FT_DB_OPTIONS: {{ . }}{{ end }}
     FT_SECRET_KEY: {{ .Values.app.secretKey }}
+{{- else }}
 apiVersion: v1
 kind: Secret
 metadata:
