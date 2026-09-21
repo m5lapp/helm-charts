@@ -200,9 +200,9 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.app.terminationGracePeriodSeconds }}
       {{- if $dbMTLS }}
       volumes:
-      - name: {{ .Chart.Name }}.db-mtls-certs
+      - name: {{ .Chart.Name }}-db-mtls-certs
         secret:
           secretName: {{ .Chart.Name }}-db-mtls-certs
-          defaultMode: '0400'
+          defaultMode: 256
       {{- end }}
 
