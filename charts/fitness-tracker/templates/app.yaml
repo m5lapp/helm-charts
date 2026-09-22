@@ -196,6 +196,8 @@ spec:
           mountPath: /home/app/mtls/
           readOnly: true
         {{- end }}
+      securityContext:
+        fsGroup: 1000
       serviceAccountName: {{ .Chart.Name }}
       terminationGracePeriodSeconds: {{ .Values.app.terminationGracePeriodSeconds }}
       {{- if $dbMTLS }}
@@ -203,5 +205,14 @@ spec:
       - name: {{ .Chart.Name }}-db-mtls-certs
         secret:
           secretName: {{ .Chart.Name }}-db-mtls-certs
+          defaultMode: 0644
+          items:
+          - key: ca.crt
+            path: ca.crt
+          - key: tls.crt
+            path: tls.crt
+          - key: tls.key
+            path: tls.key
+            mode: 0640
       {{- end }}
 
