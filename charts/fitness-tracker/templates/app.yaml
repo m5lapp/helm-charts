@@ -203,6 +203,5 @@ spec:
       - name: {{ .Chart.Name }}-db-mtls-certs
         secret:
           secretName: {{ .Chart.Name }}-db-mtls-certs
-          defaultMode: 0440
       {{- end }}
 
