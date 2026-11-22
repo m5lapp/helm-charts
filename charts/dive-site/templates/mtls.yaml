@@ -9,6 +9,7 @@ spec:
   isCA: true
   commonName: {{ .Values.ingress.fqdn }}
   secretName: {{ .Values.ingress.fqdn | replace "." "-" }}-ca-cert
+  duration: {{ .Values.ingress.mtls.clientCert.caDuration }}
   privateKey:
     algorithm: ECDSA
     size: 256

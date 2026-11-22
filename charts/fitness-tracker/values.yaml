@@ -61,6 +61,7 @@ ingress:
   mtls:
     active: false
     clientCert:
+      caDuration: 87600h # 10 years.
       duration: 8760h # 1 year.
       userName: fitness-tracker
     trustNamespace: cert-manager
